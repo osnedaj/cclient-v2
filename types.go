@@ -1,4 +1,4 @@
-package cclient
+package cclient_v2
 
 import (
 	"context"
