@@ -6,6 +6,7 @@ import (
 	"compress/zlib"
 	"encoding/json"
 	"fmt"
+	"github.com/gabriel-vasile/mimetype"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -27,6 +28,10 @@ func (r *Response) Cookies() []*http.Cookie {
 func (r *Response) Body(params ...string) []byte {
 	encoding := r.headers.Get("Content-Encoding")
 	body := r.body
+
+	mtype := mimetype.Detect(body)
+	println(mtype.String())
+
 	if len(encoding) > 0 || len(encoding) == 0 && len(params) > 0 {
 		if len(params) > 0 {
 			encoding = params[0]
