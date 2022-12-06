@@ -5,8 +5,6 @@ import (
 	"compress/gzip"
 	"compress/zlib"
 	"encoding/json"
-	"fmt"
-	"github.com/gabriel-vasile/mimetype"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -26,38 +24,36 @@ func (r *Response) Cookies() []*http.Cookie {
 
 // Body returns the response body
 func (r *Response) Body(params ...string) []byte {
-	encoding := r.headers.Get("Content-Encoding")
+	//encoding := r.headers.Get("Content-Encoding")
 	body := r.body
 
-	mtype := mimetype.Detect(body)
-	println(mtype.String())
+	//if len(encoding) > 0 || len(encoding) == 0 && len(params) > 0 {
+	//	if len(params) > 0 {
+	//		encoding = params[0]
+	//	}
+	//	if encoding == "gzip" {
+	//		unz, err := gUnzipData(body)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//		return unz
+	//	} else if encoding == "deflate" {
+	//		unz, err := enflateData(body)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//		return unz
+	//	} else if encoding == "br" {
+	//		unz, err := unBrotliData(body)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//		return unz
+	//	} else {
+	//		fmt.Println("UNKNOWN ENCODING: " + encoding)
+	//	}
+	//}
 
-	if len(encoding) > 0 || len(encoding) == 0 && len(params) > 0 {
-		if len(params) > 0 {
-			encoding = params[0]
-		}
-		if encoding == "gzip" {
-			unz, err := gUnzipData(body)
-			if err != nil {
-				fmt.Println(err)
-			}
-			return unz
-		} else if encoding == "deflate" {
-			unz, err := enflateData(body)
-			if err != nil {
-				fmt.Println(err)
-			}
-			return unz
-		} else if encoding == "br" {
-			unz, err := unBrotliData(body)
-			if err != nil {
-				fmt.Println(err)
-			}
-			return unz
-		} else {
-			fmt.Println("UNKNOWN ENCODING: " + encoding)
-		}
-	}
 	return body
 }
 
@@ -97,29 +93,31 @@ func unBrotliData(data []byte) (resData []byte, err error) {
 
 // BodyAsJSON unmarshalls the current response body to the specified data structure
 func (r *Response) BodyAsJSON(data interface{}) error {
-	encoding := r.headers.Get("Content-Encoding")
+	//encoding := r.headers.Get("Content-Encoding")
 	mainBody := r.body
-	if len(encoding) > 0 {
-		if encoding == "gzip" {
-			body, err := gUnzipData(mainBody)
-			if err != nil {
-				fmt.Println(err)
-			}
-			mainBody = body
-		} else if encoding == "deflate" {
-			body, err := enflateData(mainBody)
-			if err != nil {
-				fmt.Println(err)
-			}
-			mainBody = body
-		} else if encoding == "br" {
-			body, err := unBrotliData(mainBody)
-			if err != nil {
-				fmt.Println(err)
-			}
-			mainBody = body
-		}
-	}
+
+	//if len(encoding) > 0 {
+	//	if encoding == "gzip" {
+	//		body, err := gUnzipData(mainBody)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//		mainBody = body
+	//	} else if encoding == "deflate" {
+	//		body, err := enflateData(mainBody)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//		mainBody = body
+	//	} else if encoding == "br" {
+	//		body, err := unBrotliData(mainBody)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//		}
+	//		mainBody = body
+	//	}
+	//}
+
 	return json.Unmarshal(mainBody, data)
 }
 
